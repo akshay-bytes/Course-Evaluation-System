@@ -1,33 +1,44 @@
 <?php
 session_start();
 include('./db_connect.php');
-ob_start();
-// if(!isset($_SESSION['system'])){
 
-// $system = $conn->query("SELECT * FROM system_settings")->fetch_array();
+// Start output buffering
+ob_start();
+
+// Fetch system settings
 $stmt = $conn->prepare("SELECT * FROM system_settings");
 $stmt->execute();
 $system = $stmt->get_result()->fetch_array();
 
-foreach ($system as $k => $v) {
-  $_SESSION['system'][$k] = $v;
-}
-// }
+// Store system settings in session
+$_SESSION['system'] = $system;
+
+// End output buffering
 ob_end_flush();
 
+// If user is already logged in, redirect to home page
 if (isset($_SESSION['login_id'])) {
   header("location:index.php?page=home");
   exit;
 }
-include 'header.php'
+
+// Include header file
+include 'header.php';
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+</head>
+
 <body class="hold-transition login-page bg-black">
 
-  <h2><b><?php echo $_SESSION['system']['name'] ?> - <span id="user_role"><?php echo isset($_POST['login']) ? ($_POST['login'] == 1 ? 'Admin' : ($_POST['login'] == 2 ? 'Faculty' : 'Student')) : 'Student' ?></span></b></h2>
+  <!-- Display system name and user role -->
+  <h2><b><?php echo $_SESSION['system']['name'] ?> - <span id="user_role">Student</span></b></h2>
 
   <div class="login-box">
     <div class="login-logo">
@@ -55,7 +66,7 @@ include 'header.php'
           </div>
           <div class="form-group mb-3">
             <label for="">Login As</label>
-            <select name="login" id="" class="custom-select custom-select-sm">
+            <select name="login" id="login" class="custom-select custom-select-sm">
               <option value="3">Student</option>
               <option value="2">Faculty</option>
               <option value="1">Admin</option>
@@ -82,8 +93,15 @@ include 'header.php'
     </div>
   </div>
   <!-- /.login-box -->
+
   <script>
     $(document).ready(function() {
+      // Update user role text based on selected option
+      $('#login').change(function() {
+        var selectedOption = $(this).children('option:selected').text();
+        $('#user_role').text(selectedOption);
+      });
+
       $('#login-form').submit(function(e) {
         e.preventDefault()
         start_load()
@@ -110,6 +128,7 @@ include 'header.php'
       })
     })
   </script>
+
   <?php include 'footer.php' ?>
 
 </body>

@@ -103,11 +103,12 @@ if ($action == 'delete_question') {
 		echo $save;
 }
 
-// if($action == 'save_criteria_question'){
+// if ($action == 'save_criteria_question') {
 // 	$save = $crud->save_criteria_question();
-// 	if($save)
+// 	if ($save)
 // 		echo $save;
 // }
+
 if ($action == 'save_criteria_order') {
 	$save = $crud->save_criteria_order();
 	if ($save)
