@@ -39,6 +39,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         return $conn->real_escape_string(trim($value));
                     }, $data);
 
+                    // Hash the password
+                    // $hashedPassword = password_hash($sanitizedData[4], PASSWORD_DEFAULT);
+                    // Hash the password using MD5
+                    $hashedPassword = md5($sanitizedData[4]);
+
                     // Assign CSV data to variables
                     $school_id = $sanitizedData[0];
                     $firstname = $sanitizedData[1];
@@ -46,15 +51,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $email = $sanitizedData[3];
                     // $password = $sanitizedData[4];
                     $password = $hashedPassword;
-                    $class_id = $sanitizedData[5];
-                    $avatar = $sanitizedData[6];
-                    $date_created = $sanitizedData[7];
-
-                    
-                    // Hash the password
-                    // $hashedPassword = password_hash($sanitizedData[4], PASSWORD_DEFAULT);
-                    // Hash the password using MD5
-                    $hashedPassword = md5($sanitizedData[4]);
+                    // $class_id = $sanitizedData[5];
+                    $avatar = $sanitizedData[5];
+                    $date_created = $sanitizedData[6];
 
                     // Determine the unique identifier for the current row
                     // For example, you can use the email column as the unique identifier

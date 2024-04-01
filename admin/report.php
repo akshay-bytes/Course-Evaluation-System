@@ -16,6 +16,36 @@ function ordinal_suffix($num)
 	return $num . 'th';
 }
 ?>
+
+<!--  -->
+<!-- Add this button where you want to trigger the display of feedback statistics -->
+<div class="p-lg-2">
+	<button class="btn btn-sm btn-info" id="feedback-statistics-btn" style="padding: 0.5vw;">Feedback Statistics</button>
+</div>
+
+<!-- Model to show the subjectwise evaluation statistics -->
+
+<div class="modal fade" id="feedback-statistics-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document" style="max-width: 70vw;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Feedback Statistics</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<!-- Feedback statistics content will be loaded here -->
+				<div id="feedback-statistics-modal-body"></div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
 <div class="col-lg-12">
 	<div class="callout callout-info">
 		<div class="d-flex w-100 justify-content-center align-items-center">
@@ -160,7 +190,64 @@ function ordinal_suffix($num)
 		}
 	</style>
 </noscript>
+
+<!-- Include jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <script>
+	$(document).ready(function() {
+		// Function to handle pagination link clicks
+		$('.pagination-link').on('click', function(e) {
+			e.preventDefault(); // Prevent default anchor behavior
+
+			// Get the page number from the data attribute
+			var page = $(this).data('page');
+
+			// Get the class_id and subject_id from the URL
+			var urlParams = new URLSearchParams(window.location.search);
+			var classId = urlParams.get('class_id');
+			var subjectId = urlParams.get('subject_id');
+
+			// AJAX request to fetch new data based on the selected page
+			$.ajax({
+				url: 'fetch_students.php',
+				type: 'GET',
+				data: {
+					class_id: classId,
+					subject_id: subjectId,
+					page: page // Include the current page number in the request
+				},
+				success: function(response) {
+					// Update the content of the modal or table with the new data
+					$('#modal-content').html(response);
+				},
+				error: function(xhr, status, error) {
+					console.error(xhr.responseText);
+				}
+			});
+		});
+	});
+
+	$(document).ready(function() {
+		$('#feedback-statistics-btn').click(function() {
+			// Make AJAX request to fetch feedback statistics
+			$.ajax({
+				url: 'feedback_statistics.php',
+				method: 'GET',
+				success: function(response) {
+					// Display feedback statistics in the modal
+					$('#feedback-statistics-modal-body').html(response);
+					$('#feedback-statistics-modal').modal('show'); // Open the modal
+				},
+				error: function(xhr, status, error) {
+					console.error("Error:", xhr.responseText);
+				}
+			});
+		});
+	});
+
+	// 
+
 	$(document).ready(function() {
 		$('#faculty_id').change(function() {
 			if ($(this).val() > 0)

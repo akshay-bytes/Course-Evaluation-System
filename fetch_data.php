@@ -40,4 +40,3 @@ if ($result) {
 
 // Close database connection
 $conn->close();
-?>

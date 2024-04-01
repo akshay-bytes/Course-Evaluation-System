@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $uniqueIdentifier = $sanitizedData[0]; // Assuming email is the unique identifier
 
                     // Check if the row already exists in the database
-                    $existingRowQuery = $conn->prepare("SELECT COUNT(*) FROM subject_list WHERE email = ?");
+                    $existingRowQuery = $conn->prepare("SELECT COUNT(*) FROM subject_list WHERE code = ?");
                     $existingRowQuery->bind_param("s", $uniqueIdentifier);
                     $existingRowQuery->execute();
                     $existingRowQuery->bind_result($rowCount);

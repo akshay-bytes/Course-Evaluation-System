@@ -1,12 +1,41 @@
-<?php 
+<?php
 include 'db_connect.php';
-if(isset($_GET['id'])){
-	$qry = $conn->query("SELECT r.*,concat(e.lastname,', ',e.firstname,' ',e.middlename) as name,t.task,concat(ev.lastname,', ',ev.firstname,' ',ev.middlename) as ename,((((r.efficiency + r.timeliness + r.quality + r.accuracy)/4)/5) * 100) as pa FROM ratings r inner join employee_list e on e.id = r.employee_id inner join task_list t on t.id = r.task_id inner join evaluator_list ev on ev.id = r.evaluator_id  where r.id = ".$_GET['id'])->fetch_array();
-	foreach($qry as $k => $v){
+
+if (isset($_GET['id'])) {
+	// Prepare the SQL statement with a placeholder for the ID
+	$stmt = $conn->prepare("SELECT r.*, concat(e.lastname,', ',e.firstname,' ',e.middlename) as name, t.task, concat(ev.lastname,', ',ev.firstname,' ',ev.middlename) as ename, ((((r.efficiency + r.timeliness + r.quality + r.accuracy)/4)/5) * 100) as pa FROM ratings r INNER JOIN employee_list e ON e.id = r.employee_id INNER JOIN task_list t ON t.id = r.task_id INNER JOIN evaluator_list ev ON ev.id = r.evaluator_id WHERE r.id = ?");
+
+	if (!$stmt) {
+		die("Error in preparing statement: " . $conn->error);
+	}
+
+	// Bind the ID parameter
+	$stmt->bind_param("i", $_GET['id']);
+
+	// Execute the query
+	// $stmt->execute();
+	if (!$stmt->execute()) {
+		die("Error in executing statement: " . $stmt->error);
+	}
+
+	// Get the result
+	$result = $stmt->get_result();
+
+	// Fetch the row
+	$row = $result->fetch_assoc();
+
+	if (!$row) {
+		die("No record found with the given ID.");
+	}
+
+	// Assign fetched values to variables
+	foreach ($row as $k => $v) {
 		$$k = $v;
 	}
 }
+
 ?>
+
 <div class="container-fluid">
 	<div class="col-lg-12">
 		<div class="row">
@@ -25,11 +54,11 @@ if(isset($_GET['id'])){
 				</dl>
 				<dl>
 					<dt><b class="border-bottom border-primary">Date Evaluated</b></dt>
-					<dd><?php echo date("m d,Y",strtotime($date_created)) ?></dd>
+					<dd><?php echo date("m d,Y", strtotime($date_created)) ?></dd>
 				</dl>
 				<dl>
-				<dt><b class="border-bottom border-primary">Remarks</b></dt>
-				<dd><?php echo $remarks ?></dd>
+					<dt><b class="border-bottom border-primary">Remarks</b></dt>
+					<dd><?php echo $remarks ?></dd>
 				</dl>
 			</div>
 			<div class="col-md-6">
@@ -52,24 +81,26 @@ if(isset($_GET['id'])){
 				</dl>
 				<dl>
 					<dt><b class="border-bottom border-primary">Performance Average</b></dt>
-					<dd><?php echo number_format($pa,2).'%' ?></dd>
+					<dd><?php echo number_format($pa, 2) . '%' ?></dd>
 				</dl>
 			</div>
 		</div>
 	</div>
 </div>
 <style>
-	#uni_modal .modal-footer{
+	#uni_modal .modal-footer {
 		display: none
 	}
-	#uni_modal .modal-footer.display{
+
+	#uni_modal .modal-footer.display {
 		display: flex
 	}
-	#post-field{
+
+	#post-field {
 		max-height: 70vh;
 		overflow: auto;
 	}
 </style>
 <div class="modal-footer display p-0 m-0">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 </div>
