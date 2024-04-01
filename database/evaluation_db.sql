@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 15, 2020 at 01:59 PM
--- Server version: 10.4.11-MariaDB
--- PHP Version: 7.2.28
+-- Generation Time: Apr 01, 2024 at 06:19 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -30,20 +29,20 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `academic_list` (
   `id` int(30) NOT NULL,
+  `academic_id` int(30) NOT NULL,
   `year` text NOT NULL,
   `semester` int(30) NOT NULL,
   `is_default` tinyint(1) NOT NULL DEFAULT 0,
   `status` int(1) NOT NULL DEFAULT 0 COMMENT '0=Pending,1=Start,2=Closed'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `academic_list`
 --
 
-INSERT INTO `academic_list` (`id`, `year`, `semester`, `is_default`, `status`) VALUES
-(1, '2019-2020', 1, 0, 0),
-(2, '2019-2020', 2, 0, 0),
-(3, '2020-2021', 1, 1, 1);
+INSERT INTO `academic_list` (`id`, `academic_id`, `year`, `semester`, `is_default`, `status`) VALUES
+(1, 1, '2022-2023', 2, 0, 0),
+(2, 2, '2023-2024', 2, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -56,16 +55,19 @@ CREATE TABLE `class_list` (
   `curriculum` text NOT NULL,
   `level` text NOT NULL,
   `section` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `class_list`
 --
 
 INSERT INTO `class_list` (`id`, `curriculum`, `level`, `section`) VALUES
-(1, 'BSIT', '1', 'A'),
-(2, 'BSIT', '1', 'B'),
-(3, 'BSIT', '1', 'C');
+(1, 'IT', '2', 'A'),
+(2, 'IT', '2', 'B'),
+(3, 'IT', '3', 'A'),
+(4, 'IT', '3', 'B'),
+(5, 'IT', '4', 'A'),
+(6, 'IT', '4', 'B');
 
 -- --------------------------------------------------------
 
@@ -77,15 +79,15 @@ CREATE TABLE `criteria_list` (
   `id` int(30) NOT NULL,
   `criteria` text NOT NULL,
   `order_by` int(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `criteria_list`
 --
 
 INSERT INTO `criteria_list` (`id`, `criteria`, `order_by`) VALUES
-(1, 'Criteria 101', 0),
-(2, 'Criteria 102', 1);
+(1, 'Course', 0),
+(2, 'Test', 1);
 
 -- --------------------------------------------------------
 
@@ -97,22 +99,48 @@ CREATE TABLE `evaluation_answers` (
   `evaluation_id` int(30) NOT NULL,
   `question_id` int(30) NOT NULL,
   `rate` int(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `evaluation_answers`
 --
 
 INSERT INTO `evaluation_answers` (`evaluation_id`, `question_id`, `rate`) VALUES
-(1, 1, 5),
-(1, 6, 4),
-(1, 3, 5),
-(2, 1, 5),
-(2, 6, 5),
+(1, 1, 4),
+(1, 2, 5),
+(1, 3, 4),
+(1, 4, 5),
+(1, 5, 4),
+(2, 1, 4),
+(2, 2, 5),
 (2, 3, 4),
-(3, 1, 5),
-(3, 6, 5),
-(3, 3, 4);
+(2, 4, 5),
+(2, 5, 4),
+(3, 1, 4),
+(3, 2, 5),
+(3, 3, 4),
+(3, 4, 5),
+(3, 5, 4),
+(4, 1, 5),
+(4, 2, 5),
+(4, 3, 5),
+(4, 4, 5),
+(4, 5, 5),
+(5, 1, 1),
+(5, 2, 1),
+(5, 3, 1),
+(5, 4, 1),
+(5, 5, 1),
+(6, 1, 3),
+(6, 2, 5),
+(6, 3, 3),
+(6, 4, 5),
+(6, 5, 3),
+(7, 1, 3),
+(7, 2, 5),
+(7, 3, 4),
+(7, 4, 5),
+(7, 5, 5);
 
 -- --------------------------------------------------------
 
@@ -129,16 +157,18 @@ CREATE TABLE `evaluation_list` (
   `faculty_id` int(30) NOT NULL,
   `restriction_id` int(30) NOT NULL,
   `date_taken` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `evaluation_list`
 --
 
 INSERT INTO `evaluation_list` (`evaluation_id`, `academic_id`, `class_id`, `student_id`, `subject_id`, `faculty_id`, `restriction_id`, `date_taken`) VALUES
-(1, 3, 1, 1, 1, 1, 8, '2020-12-15 16:26:51'),
-(2, 3, 2, 2, 2, 1, 9, '2020-12-15 16:33:37'),
-(3, 3, 1, 3, 1, 1, 8, '2020-12-15 20:18:49');
+(3, 2, 5, 1, 1, 1, 9, '2024-02-26 15:58:04'),
+(4, 2, 5, 1, 4, 2, 11, '2024-02-26 15:58:06'),
+(5, 2, 3, 3, 2, 2, 13, '2024-02-26 15:59:00'),
+(6, 2, 5, 5, 1, 1, 9, '2024-03-12 10:06:45'),
+(7, 2, 5, 5, 4, 2, 11, '2024-03-12 10:06:55');
 
 -- --------------------------------------------------------
 
@@ -155,14 +185,15 @@ CREATE TABLE `faculty_list` (
   `password` text NOT NULL,
   `avatar` text NOT NULL DEFAULT 'no-image-available.png',
   `date_created` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `faculty_list`
 --
 
 INSERT INTO `faculty_list` (`id`, `school_id`, `firstname`, `lastname`, `email`, `password`, `avatar`, `date_created`) VALUES
-(1, '20140623', 'George', 'Wilson', 'gwilson@sample.com', 'd40242fb23c45206fadee4e2418f274f', '1608011100_avatar.jpg', '2020-12-15 13:45:18');
+(1, '101', 'Rahul', 'Pawar', '101@medicaps.ac.in', '634555a8c3b6790128207bf0e5f231e7', 'no-image-available.png', '2024-02-21 14:21:36'),
+(2, '102', 'Sagar', 'Pandya', '102@medicaps.ac.in', '634555a8c3b6790128207bf0e5f231e7', 'no-image-available.png', '2024-02-21 14:22:11');
 
 -- --------------------------------------------------------
 
@@ -176,17 +207,18 @@ CREATE TABLE `question_list` (
   `question` text NOT NULL,
   `order_by` int(30) NOT NULL,
   `criteria_id` int(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `question_list`
 --
 
 INSERT INTO `question_list` (`id`, `academic_id`, `question`, `order_by`, `criteria_id`) VALUES
-(1, 3, 'Sample Question', 0, 1),
-(3, 3, 'Test', 2, 2),
-(5, 0, 'Question 101', 0, 1),
-(6, 3, 'Sample 101', 4, 1);
+(1, 2, 'Que 1', 0, 1),
+(2, 2, 'Que 2', 1, 1),
+(3, 2, 'Que 3', 2, 1),
+(4, 2, 'Que 4', 3, 1),
+(5, 2, 'Que 5', 4, 1);
 
 -- --------------------------------------------------------
 
@@ -200,16 +232,22 @@ CREATE TABLE `restriction_list` (
   `faculty_id` int(30) NOT NULL,
   `class_id` int(30) NOT NULL,
   `subject_id` int(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `restriction_list`
 --
 
 INSERT INTO `restriction_list` (`id`, `academic_id`, `faculty_id`, `class_id`, `subject_id`) VALUES
-(8, 3, 1, 1, 1),
-(9, 3, 1, 2, 2),
-(10, 3, 1, 3, 3);
+(1, 3, 2, 7, 4),
+(2, 3, 2, 8, 5),
+(3, 3, 3, 7, 5),
+(4, 3, 3, 8, 7),
+(9, 2, 1, 5, 1),
+(10, 2, 1, 6, 4),
+(11, 2, 2, 5, 4),
+(12, 2, 2, 6, 1),
+(13, 2, 2, 3, 2);
 
 -- --------------------------------------------------------
 
@@ -220,6 +258,7 @@ INSERT INTO `restriction_list` (`id`, `academic_id`, `faculty_id`, `class_id`, `
 CREATE TABLE `student_list` (
   `id` int(30) NOT NULL,
   `school_id` varchar(100) NOT NULL,
+  `academic_id` int(11) NOT NULL,
   `firstname` varchar(200) NOT NULL,
   `lastname` varchar(200) NOT NULL,
   `email` varchar(200) NOT NULL,
@@ -227,16 +266,18 @@ CREATE TABLE `student_list` (
   `class_id` int(30) NOT NULL,
   `avatar` text NOT NULL DEFAULT 'no-image-available.png',
   `date_created` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `student_list`
 --
 
-INSERT INTO `student_list` (`id`, `school_id`, `firstname`, `lastname`, `email`, `password`, `class_id`, `avatar`, `date_created`) VALUES
-(1, '6231415', 'John', 'Smith', 'jsmith@sample.com', '1254737c076cf867dc53d60a0364f38e', 1, '1608012360_avatar.jpg', '2020-12-15 14:06:14'),
-(2, '101497', 'Claire', 'Blake', 'cblake@sample.com', '4744ddea876b11dcb1d169fadf494418', 2, '1608012720_47446233-clean-noir-et-gradient-sombre-image-de-fond-abstrait-.jpg', '2020-12-15 14:12:03'),
-(3, '123', 'Mike', 'Williams', 'mwilliams@sample.com', '3cc93e9a6741d8b40460457139cf8ced', 1, '1608034680_1605601740_download.jpg', '2020-12-15 20:18:22');
+INSERT INTO `student_list` (`id`, `school_id`, `academic_id`, `firstname`, `lastname`, `email`, `password`, `class_id`, `avatar`, `date_created`) VALUES
+(1, 'EN20IT301003', 2, 'Aastha Raj', 'Singh', 'EN20IT301003@medicaps.ac.in', '634555a8c3b6790128207bf0e5f231e7', 5, 'no-image-available.png', '2024-02-25 14:11:50'),
+(2, 'EN20IT301001', 2, 'Aaditya', 'Kumar', 'EN20IT301001@medicaps.ac.in', '634555a8c3b6790128207bf0e5f231e7', 5, 'no-image-available.png', '2024-02-25 15:49:49'),
+(3, 'EN21IT301001', 2, 'Demo', 'Demo', 'EN21IT301001@medicaps.ac.in', '36396b644975f471b04d0a5f0027a94b', 3, 'no-image-available.png', '2024-02-26 15:32:22'),
+(4, 'EN20IT3010104', 2, 'Aayush', 'Arora', 'EN20IT301004@medicaps.ac.in', '634555a8c3b6790128207bf0e5f231e7', 5, 'no-image-available.png', '2024-02-26 15:33:25'),
+(5, 'EN20IT301017', 2, 'Arish', 'sahu', 'EN20T301017@medicaps.ac.in', '634555a8c3b6790128207bf0e5f231e7', 5, 'no-image-available.png', '2024-03-12 10:06:04');
 
 -- --------------------------------------------------------
 
@@ -249,16 +290,17 @@ CREATE TABLE `subject_list` (
   `code` varchar(50) NOT NULL,
   `subject` text NOT NULL,
   `description` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `subject_list`
 --
 
 INSERT INTO `subject_list` (`id`, `code`, `subject`, `description`) VALUES
-(1, '101', 'Sample Subject', 'Test 101'),
-(2, 'ENG-101', 'English', 'English'),
-(3, 'M-101', 'Math 101', 'Math - Advance Algebra ');
+(1, 'IT1', 'Computer Network', ''),
+(2, 'IT2', 'Computer System Architecture', ''),
+(3, 'IT3', 'Operating System', ''),
+(4, 'IT4', 'Cloud Computing', '');
 
 -- --------------------------------------------------------
 
@@ -273,14 +315,14 @@ CREATE TABLE `system_settings` (
   `contact` varchar(20) NOT NULL,
   `address` text NOT NULL,
   `cover_img` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `system_settings`
 --
 
 INSERT INTO `system_settings` (`id`, `name`, `email`, `contact`, `address`, `cover_img`) VALUES
-(1, 'Faculty Evaluation System', 'info@sample.comm', '+6948 8542 623', '2102  Caldwell Road, Rochester, New York, 14608', '');
+(1, 'Course Evaluation System', 'Akshaybillore92@gmail.com', '+91 8462069215', 'Indore, Madhya Pradesh, India', '');
 
 -- --------------------------------------------------------
 
@@ -295,15 +337,18 @@ CREATE TABLE `users` (
   `email` varchar(200) NOT NULL,
   `password` text NOT NULL,
   `avatar` text NOT NULL DEFAULT 'no-image-available.png',
-  `date_created` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `date_created` datetime NOT NULL DEFAULT current_timestamp(),
+  `remember_token` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `avatar`, `date_created`) VALUES
-(1, 'Administrator', '', 'admin@admin.com', '0192023a7bbd73250516f069df18b500', '1607135820_avatar.jpg', '2020-11-26 10:57:04');
+INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `avatar`, `date_created`, `remember_token`) VALUES
+(1, 'Administrator', 'IT', 'ITAdmin@medicaps.ac.in', '634555a8c3b6790128207bf0e5f231e7', '1607135820_avatar.jpg', '2020-11-26 10:57:04', NULL),
+(2, 'Akshay', 'Billore', 'Akshaybillore92@gmail.com', '634555a8c3b6790128207bf0e5f231e7', 'no-image-available.png', '2024-02-20 18:54:42', NULL),
+(3, 'Dr. Prashant', 'Panse', 'HodIT@medicaps.ac.in', '634555a8c3b6790128207bf0e5f231e7', 'no-image-available.png', '2024-02-22 16:38:51', NULL);
 
 --
 -- Indexes for dumped tables
@@ -383,55 +428,55 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `academic_list`
 --
 ALTER TABLE `academic_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `class_list`
 --
 ALTER TABLE `class_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `criteria_list`
 --
 ALTER TABLE `criteria_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `evaluation_list`
 --
 ALTER TABLE `evaluation_list`
-  MODIFY `evaluation_id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `evaluation_id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `faculty_list`
 --
 ALTER TABLE `faculty_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `question_list`
 --
 ALTER TABLE `question_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `restriction_list`
 --
 ALTER TABLE `restriction_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `student_list`
 --
 ALTER TABLE `student_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `subject_list`
 --
 ALTER TABLE `subject_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `system_settings`
@@ -443,7 +488,7 @@ ALTER TABLE `system_settings`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
