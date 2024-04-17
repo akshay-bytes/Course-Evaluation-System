@@ -24,7 +24,7 @@
     include 'db_connect.php';
 
     // Constants for pagination
-    $rowsPerPage = 1;
+    $rowsPerPage = 10;
 
     // Fetch feedback statistics data from the database
     $queryCount = "SELECT COUNT(*) AS total FROM (
@@ -125,29 +125,6 @@ GROUP BY
             </div>
         </div>
 
-        <!-- Pagination links -->
-        <div>
-            <ul class="pagination" style="gap: 1.5vw;  padding: 0.5vw">
-                <?php if ($totalPages > 1) : ?>
-                    <?php if ($currentPage > 1) : ?>
-                        <li>
-                            <a href="?page=<?php echo $currentPage - 1; ?>" class="pagination-link" data-page="<?php echo $currentPage - 1; ?>">Previous</a>
-                        </li>
-                    <?php endif; ?>
-                    <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
-                        <li>
-                            <a href="?page=<?php echo $i; ?>" class="pagination-link <?php if ($i == $currentPage) echo 'active'; ?>" data-page="<?php echo $i; ?>"><?php echo $i; ?></a>
-                        </li>
-                    <?php endfor; ?>
-                    <?php if ($currentPage < $totalPages) : ?>
-                        <li>
-                            <a href="?page=<?php echo $currentPage + 1; ?>" class="pagination-link" data-page="<?php echo $currentPage + 1; ?>">Next</a>
-                        </li>
-                    <?php endif; ?>
-                <?php endif; ?>
-            </ul>
-        </div>
-
     <?php
     } else {
         // No feedback statistics data found
@@ -187,41 +164,6 @@ GROUP BY
             xhttp.open("GET", "fetch_students.php?class_id=" + classId + "&subject_id=" + subjectId, true);
             xhttp.send();
         }
-        document.addEventListener("DOMContentLoaded", function() {
-            // Function to handle pagination link clicks
-            document.querySelectorAll('.pagination-link').forEach(function(element) {
-                element.addEventListener('click', function(e) {
-                    e.preventDefault(); // Prevent default anchor behavior
-
-                    // Get the page number from the data attribute
-                    var page = parseInt(this.getAttribute('data-page'));
-
-                    // Get the class_id and subject_id from the URL
-                    var urlParams = new URLSearchParams(window.location.search);
-                    var classId = urlParams.get('class_id');
-                    var subjectId = urlParams.get('subject_id');
-
-                    // Call the function to fetch and display feedback statistics for the selected page
-                    fetchFeedbackStatistics(classId, subjectId, page);
-                });
-            });
-
-            // Function to fetch and display feedback statistics for the selected page
-            function fetchFeedbackStatistics(classId, subjectId, page) {
-                // AJAX request to fetch feedback statistics data
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-                        // Replace the content of the modal with the fetched data
-                        document.getElementById('list').innerHTML = this.responseText;
-                    }
-                };
-                // Construct the URL for fetching data
-                var url = 'fetch_feedback_statistics.php?class_id=' + classId + '&subject_id=' + subjectId + '&page=' + page;
-                xhttp.open("GET", url, true);
-                xhttp.send();
-            }
-        });
     </script>
 
 </body>
