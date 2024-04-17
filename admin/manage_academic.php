@@ -17,7 +17,7 @@ if (isset($_GET['id'])) {
 		</div>
 		<div class="form-group">
 			<label for="semester" class="control-label">Semester</label>
-			<input type="number" class="form-control form-control-sm" name="semester" id="semester" value="<?php echo isset($semester) ? $semester : '' ?>" required>
+			<input type="text" class="form-control form-control-sm" name="semester" id="semester" value="<?php echo isset($semester) ? $semester : '' ?>" required>
 		</div>
 		<?php if (isset($status)) : ?>
 			<div class="form-group">

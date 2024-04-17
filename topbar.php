@@ -8,26 +8,33 @@
   </style>
 
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-primary navbar-dark">
+  <nav class="main-header navbar navbar-expand navbar-dark" style="background-color: #840F1E;">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <?php
       if (isset($_SESSION['login_id'])) :
       ?>
-        <li class="nav-item" >
+        <li class="nav-item">
           <a class="nav-link" data-widget="pushmenu" href="" role="button"><i class="fas fa-bars"></i></a>
         </li>
 
       <?php endif; ?>
 
       <li>
-        <a class="nav-link text-white"" href="./" role="button">
+        <a class="nav-link text-white" href=" ./" role="button">
           <large>
             <b>
               <?php echo $_SESSION['system']['name'] ?>
             </b>
           </large>
         </a>
+      </li>
+    </ul>
+    <ul class="navbar-nav text-white" style="align-items: center; text-align: center; margin: auto;">
+      <li class=" nav-item">
+
+        <!-- <div style="font-size: 18px; font-family: cursive; font-weight: 500;">Department of Informaton Technology <div> -->
+
       </li>
     </ul>
 

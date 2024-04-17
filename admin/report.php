@@ -1,20 +1,26 @@
 <?php $faculty_id = isset($_GET['fid']) ? $_GET['fid'] : ''; ?>
 <?php
-function ordinal_suffix($num)
+function ordinal_suffix($val)
 {
-	$num = $num % 100; // protect against large numbers
-	if ($num < 11 || $num > 13) {
-		switch ($num % 10) {
-			case 1:
-				return $num . 'st';
-			case 2:
-				return $num . 'nd';
-			case 3:
-				return $num . 'rd';
+	if (is_numeric($val)) {
+		$num = $val % 100; // protect against large numbers
+		if ($num < 11 || $num > 13) {
+			switch ($num % 10) {
+				case 1:
+					return $val . 'st';
+				case 2:
+					return $val . 'nd';
+				case 3:
+					return $val . 'rd';
+			}
 		}
+		return $val . 'th';
+	} else {
+		// Handle non-numeric values here
+		return $val; // Simply return the value as is
 	}
-	return $num . 'th';
 }
+
 ?>
 
 <!--  -->
@@ -39,7 +45,7 @@ function ordinal_suffix($num)
 				<div id="feedback-statistics-modal-body"></div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button id="feedback-statistic-modal-close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
@@ -119,12 +125,12 @@ function ordinal_suffix($num)
 					<table class="table table-condensed wborder">
 						<thead>
 							<tr class="bg-gradient-secondary">
-								<th class=" p-1"><b><?php echo $crow['criteria'] ?></b></th>
-								<th width="5%" class="text-center">1</th>
-								<th width="5%" class="text-center">2</th>
-								<th width="5%" class="text-center">3</th>
-								<th width="5%" class="text-center">4</th>
-								<th width="5%" class="text-center">5</th>
+								<th class="p-1"><b><?php echo $crow['criteria'] ?></b></th>
+								<th width="5%" class="text-center"> Strongly Disagree </th>
+								<th width="5%" class="text-center"> Disagree </th>
+								<th width="5%" class="text-center"> Uncertain </th>
+								<th width="5%" class="text-center"> Agree </th>
+								<th width="5%" class="text-center"> Strongly Agree </th>
 							</tr>
 						</thead>
 						<tbody class="tr-sortable">
@@ -191,43 +197,17 @@ function ordinal_suffix($num)
 	</style>
 </noscript>
 
+<!-- Canvas element for the chart -->
+<canvas id="feedbackChart" width="400" height="400"></canvas>
+
+<!-- Include Chart.js library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <!-- Include jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script>
-	$(document).ready(function() {
-		// Function to handle pagination link clicks
-		$('.pagination-link').on('click', function(e) {
-			e.preventDefault(); // Prevent default anchor behavior
-
-			// Get the page number from the data attribute
-			var page = $(this).data('page');
-
-			// Get the class_id and subject_id from the URL
-			var urlParams = new URLSearchParams(window.location.search);
-			var classId = urlParams.get('class_id');
-			var subjectId = urlParams.get('subject_id');
-
-			// AJAX request to fetch new data based on the selected page
-			$.ajax({
-				url: 'fetch_students.php',
-				type: 'GET',
-				data: {
-					class_id: classId,
-					subject_id: subjectId,
-					page: page // Include the current page number in the request
-				},
-				success: function(response) {
-					// Update the content of the modal or table with the new data
-					$('#modal-content').html(response);
-				},
-				error: function(xhr, status, error) {
-					console.error(xhr.responseText);
-				}
-			});
-		});
-	});
-
+	// Ajax Reqquest to show modal
 	$(document).ready(function() {
 		$('#feedback-statistics-btn').click(function() {
 			// Make AJAX request to fetch feedback statistics
@@ -245,8 +225,6 @@ function ordinal_suffix($num)
 			});
 		});
 	});
-
-	// 
 
 	$(document).ready(function() {
 		$('#faculty_id').change(function() {
@@ -337,16 +315,20 @@ function ordinal_suffix($num)
 			},
 			success: function(resp) {
 				if (resp) {
-					resp = JSON.parse(resp)
+					resp = JSON.parse(resp);
 					if (Object.keys(resp).length <= 0) {
-						$('.rates').text('')
-						$('#tse').text('')
-						$('#print-btn').hide()
+						$('.rates').text('');
+						$('#tse').text('');
+						$('#print-btn').hide();
+						var feedbackData = JSON.parse(resp);
+
+						// Call the function to create the chart with the feedbackData
+						createChart(feedbackData);
 					} else {
-						$('#print-btn').show()
-						$('#tse').text(resp.tse)
-						$('.rates').text('-')
-						var data = resp.data
+						$('#print-btn').show();
+						$('#tse').text(resp.tse);
+						$('.rates').text('-');
+						var data = resp.data;
 						Object.keys(data).map(q => {
 							Object.keys(data[q]).map(r => {
 								console.log($('.rate_' + r + '_' + q), data[q][r])
@@ -354,9 +336,9 @@ function ordinal_suffix($num)
 							})
 						})
 					}
-
 				}
 			},
+
 			complete: function() {
 				end_load()
 			}
@@ -376,4 +358,49 @@ function ordinal_suffix($num)
 			end_load()
 		}, 750)
 	})
+
+	//------------------------- Script for Creating Chart -------------------------//
+
+	// Sample data for the chart
+	var data = {
+		labels: ['Excellent', 'Good', 'Average', 'Below Average', 'Poor'],
+		datasets: [{
+			data: [20, 30, 15, 10, 25], // Sample scores for each category
+			backgroundColor: [
+				'rgba(255, 99, 132, 0.5)',
+				'rgba(54, 162, 235, 0.5)',
+				'rgba(255, 206, 86, 0.5)',
+				'rgba(75, 192, 192, 0.5)',
+				'rgba(153, 102, 255, 0.5)'
+			],
+			borderColor: [
+				'rgba(255, 99, 132, 1)',
+				'rgba(54, 162, 235, 1)',
+				'rgba(255, 206, 86, 1)',
+				'rgba(75, 192, 192, 1)',
+				'rgba(153, 102, 255, 1)'
+			],
+			borderWidth: 1
+		}]
+	};
+
+	// Chart configuration
+	var options = {
+		responsive: false,
+		maintainAspectRatio: false,
+		title: {
+			display: true,
+			text: 'Feedback Statistics Chart'
+		}
+	};
+
+	// Get canvas element
+	var ctx = document.getElementById('feedbackChart').getContext('2d');
+
+	// Create pie chart
+	var myPieChart = new Chart(ctx, {
+		type: 'bar',
+		data: data,
+		options: options
+	});
 </script>

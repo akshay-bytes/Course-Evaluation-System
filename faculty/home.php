@@ -1,20 +1,26 @@
 <?php include('db_connect.php');
 
-function ordinal_suffix1($num)
+function ordinal_suffix1($val)
 {
-  $num = $num % 100; // protect against large numbers
-  if ($num < 11 || $num > 13) {
-    switch ($num % 10) {
-      case 1:
-        return $num . 'st';
-      case 2:
-        return $num . 'nd';
-      case 3:
-        return $num . 'rd';
+  if (is_numeric($val)) {
+    $num = $val % 100; // protect against large numbers
+    if ($num < 11 || $num > 13) {
+      switch ($num % 10) {
+        case 1:
+          return $val . 'st';
+        case 2:
+          return $val . 'nd';
+        case 3:
+          return $val . 'rd';
+      }
     }
+    return $val . 'th';
+  } else {
+    // Handle non-numeric values here
+    return $val; // Simply return the value as is
   }
-  return $num . 'th';
 }
+
 $astat = array("Not Yet Started", "On-going", "Closed");
 ?>
 

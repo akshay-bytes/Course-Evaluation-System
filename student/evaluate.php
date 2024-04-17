@@ -1,21 +1,28 @@
 <?php
 include('db_connect.php');
 
-function ordinal_suffix($num)
+function ordinal_suffix1($val)
 {
-	$num = $num % 100; // protect against large numbers
-	if ($num < 11 || $num > 13) {
-		switch ($num % 10) {
-			case 1:
-				return $num . 'st';
-			case 2:
-				return $num . 'nd';
-			case 3:
-				return $num . 'rd';
+	if (is_numeric($val)) {
+		$num = $val % 100; // protect against large numbers
+		if ($num < 11 || $num > 13) {
+			switch ($num % 10) {
+				case 1:
+					return $val . 'st';
+				case 2:
+					return $val . 'nd';
+				case 3:
+					return $val . 'rd';
+			}
 		}
+		return $val . 'th';
+	} else {
+		// Handle non-numeric values here
+		return $val; // Simply return the value as is
 	}
-	return $num . 'th';
 }
+
+
 $rid = '';
 $faculty_id = '';
 $subject_id = '';
@@ -50,7 +57,7 @@ $restriction = $stmt->get_result();
 		<div class="col-md-9">
 			<div class="card card-outline card-info">
 				<div class="card-header">
-					<b>Evaluation Questionnaire for Academic: <?php echo $_SESSION['academic']['year'] . ' ' . (ordinal_suffix($_SESSION['academic']['semester'])) ?> </b>
+					<h5><b>Academic Year: <?php echo $_SESSION['academic']['year'] . ' ' . (ordinal_suffix1($_SESSION['academic']['semester'])) ?> Semester</b></h5>
 					<div class="card-tools">
 						<button class="btn btn-sm btn-flat btn-primary bg-gradient-primary mx-1" form="manage-evaluation">Submit Evaluation</button>
 					</div>

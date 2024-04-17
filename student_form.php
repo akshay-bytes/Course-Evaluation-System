@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
 
                 // Prepare SQL statement for inserting data
-                $stmt = $conn->prepare("INSERT INTO student_list (school_id, firstname, lastname, email, password, class_id, avatar, date_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt = $conn->prepare("INSERT INTO student_list (school_id, firstname, lastname, email, password, class_id) VALUES (?, ?, ?, ?, ?, ?)");
 
                 // Read the CSV file
                 $file = fopen($target_file, "r");
@@ -97,8 +97,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // $password = $sanitizedData[4];
                     $password = $hashedPassword;
                     $class_id = $sanitizedData[5];
-                    $avatar = $sanitizedData[6];
-                    $date_created = $sanitizedData[7];
+                    // $avatar = $sanitizedData[6];
+                    // $date_created = $sanitizedData[7];
 
                     // Determine the unique identifier for the current row
                     // For example, you can use the email column as the unique identifier
@@ -119,7 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // Insert the row into the database
 
                     // Bind parameters
-                    $stmt->bind_param("ssssssss", $school_id, $firstname, $lastname, $email, $password, $class_id, $avatar, $date_created);
+                    $stmt->bind_param("ssssss", $school_id, $firstname, $lastname, $email, $password, $class_id);
 
                     // Execute SQL statement
                     if (!$stmt->execute()) {

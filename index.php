@@ -1,5 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>index.php</title>
+
+  <style>
+    footer p span {
+      color: aliceblue;
+    }
+  </style>
+</head>
+
 <?php session_start() ?>
 <?php
 if (!isset($_SESSION['login_id']))
@@ -121,7 +134,13 @@ include 'header.php'
     <!-- /.control-sidebar -->
 
     <!-- Main Footer -->
-
+    <!-- Main Footer -->
+    <footer class="main-footer text-white" style="background-color: #840F1E;">
+      <div style="display: flex; justify-content: center; text-align: center;">
+        Copyright &copy; 2024 Developed & Designed by <span> &nbsp;Akshay Billore&nbsp; </span> and Aastha Raj Singh
+        under the guidance of Dr. Prashant Panse.
+      </div>
+    </footer>
   </div>
   <!-- ./wrapper -->
 

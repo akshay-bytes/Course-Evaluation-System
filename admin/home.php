@@ -1,20 +1,27 @@
 <?php include('db_connect.php');
 
-function ordinal_suffix1($num)
+function ordinal_suffix1($val)
 {
-  $num = $num % 100; // protect against large numbers
-  if ($num < 11 || $num > 13) {
-    switch ($num % 10) {
-      case 1:
-        return $num . 'st';
-      case 2:
-        return $num . 'nd';
-      case 3:
-        return $num . 'rd';
+  if (is_numeric($val)) {
+    $num = $val % 100; // protect against large numbers
+    if ($num < 11 || $num > 13) {
+      switch ($num % 10) {
+        case 1:
+          return $val . 'st';
+        case 2:
+          return $val . 'nd';
+        case 3:
+          return $val . 'rd';
+      }
     }
+    return $val . 'th';
+  } else {
+    // Handle non-numeric values here
+    // For example, return the value as is or provide a default suffix
+    return $val; // Just return the value as is for now
   }
-  return $num . 'th';
 }
+
 $astat = array("Not Yet Started", "On-going", "Closed");
 ?>
 <div class="col-12">
@@ -30,29 +37,30 @@ $astat = array("Not Yet Started", "On-going", "Closed");
 
         <div class="callout callout-info" style="display: flex; flex-direction: column;">
 
-          <!-- Add Students to database -->
-
+          <!-- Add Students Form -->
           <h4>Add Student Data</h4>
+          <p>Download Sample File: <a href="sample_student_data.csv" download>CSV</a></p>
           <form action="student_form.php" method="post" id="imp_student" enctype="multipart/form-data">
             <input type="file" name="file" accept=".csv">
             <button type="submit" name="submit">Upload</button>
           </form>
 
-          <!-- Add Teachers to database -->
-
+          <!-- Add Teachers Form -->
           <h4>Add Teachers Data</h4>
+          <p>Download Sample File: <a href="sample_teacher_data.csv" download>CSV</a></p>
           <form action="faculty_form.php" method="post" id="imp_faculty" enctype="multipart/form-data">
             <input type="file" name="file" accept=".csv">
             <button type="submit" name="submit">Upload</button>
           </form>
 
-          <!-- Add Course to database -->
-
+          <!-- Add Courses Form -->
           <h4>Add Course Data</h4>
-          <form action="course_form.php" method="post" id="imp_course" enctype="multipart/form-data">
+          <p>Download Sample File: <a href="sample_course_data.csv" download>CSV</a></p>
+          <form action="teacher_form.php" method="post" id="imp_course" enctype="multipart/form-data">
             <input type="file" name="file" accept=".csv">
             <button type="submit" name="submit">Upload</button>
           </form>
+
         </div>
       </div>
     </div>
@@ -77,18 +85,18 @@ $astat = array("Not Yet Started", "On-going", "Closed");
     </a>
   </div>
   <div class="col-12 col-sm-6 col-md-4">
-  <a href="index.php?page=student_list" style="text-decoration: none; color: inherit;">
-    <div class="small-box bg-light shadow-sm border">
-      <div class="inner">
-        <h3><?php echo $conn->query("SELECT * FROM student_list")->num_rows; ?></h3>
+    <a href="index.php?page=student_list" style="text-decoration: none; color: inherit;">
+      <div class="small-box bg-light shadow-sm border">
+        <div class="inner">
+          <h3><?php echo $conn->query("SELECT * FROM student_list")->num_rows; ?></h3>
 
-        <p>Total Students</p>
+          <p>Total Students</p>
+        </div>
+        <div class="icon">
+          <i class="fa ion-ios-people-outline"></i>
+        </div>
       </div>
-      <div class="icon">
-        <i class="fa ion-ios-people-outline"></i>
-      </div>
-    </div>
-  </a>
+    </a>
   </div>
   <div class="col-12 col-sm-6 col-md-4">
     <div class="small-box bg-light shadow-sm border">

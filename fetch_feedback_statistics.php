@@ -3,12 +3,10 @@
 include 'db_connect.php';
 
 // Constants for pagination
-$rowsPerPage = 10;
+$rowsPerPage = 4;
 
 // Retrieve parameters from the URL
-$classId = isset($_GET['class_id']) ? $_GET['class_id'] : '';
-$subjectId = isset($_GET['subject_id']) ? $_GET['subject_id'] : '';
-$page = isset($_GET['page']) ? $_GET['page'] : 1;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 
 // Calculate offset for pagination
 $offset = ($page - 1) * $rowsPerPage;
@@ -30,11 +28,9 @@ LEFT JOIN
     evaluation_list e ON s.id = e.student_id AND r.subject_id = e.subject_id
 LEFT JOIN
     subject_list sl ON r.subject_id = sl.id
-WHERE
-    r.class_id = $classId AND r.subject_id = $subjectId
 GROUP BY 
     r.class_id, r.subject_id, sl.code, sl.subject
--- LIMIT $offset, $rowsPerPage";
+LIMIT $offset, $rowsPerPage";
 
 $result = $conn->query($query);
 
@@ -44,16 +40,6 @@ if ($result && $result->num_rows > 0) {
     ob_start();
 ?>
     <table class="table table-hover table-bordered" id="list">
-        <thead>
-            <tr>
-                <th>Course Code</th>
-                <th>Course Name</th>
-                <th>Total Students</th>
-                <th>Students with Feedback</th>
-                <th>Students without Feedback</th>
-                <th>Action</th>
-            </tr>
-        </thead>
         <tbody>
             <?php
             // Fetching and displaying each row
@@ -66,7 +52,7 @@ if ($result && $result->num_rows > 0) {
                     <td><?php echo $row['students_evaluated_feedback']; ?></td>
                     <td><?php echo $row['students_not_evaluated_feedback']; ?></td>
                     <td>
-                        <button class=" btn btn-primary" onclick="showStudents(<?php echo $row['class_id']; ?>, <?php echo $row['subject_id']; ?>)">View Students</button>
+                        <button class="btn btn-primary" onclick="showStudents(<?php echo $row['class_id']; ?>, <?php echo $row['subject_id']; ?>)">View Students</button>
                     </td>
                 </tr>
             <?php
@@ -80,6 +66,6 @@ if ($result && $result->num_rows > 0) {
     echo $html_content;
 } else {
     // No feedback statistics data found
-    echo "No feedback statistics available.";
+    echo "No feedback statistics data available.";
 }
 ?>
