@@ -134,15 +134,15 @@
     COUNT(DISTINCT CASE WHEN e.student_id IS NOT NULL THEN e.student_id END) AS students_evaluated_feedback,
     COUNT(DISTINCT CASE WHEN e.student_id IS NULL THEN s.id END) AS students_not_evaluated_feedback
     FROM 
-        student_list s
+    student_list s
     JOIN 
-        restriction_list r ON s.class_id = r.class_id
+    restriction_list r ON s.class_id = r.class_id
     LEFT JOIN 
-        evaluation_list e ON s.id = e.student_id AND r.subject_id = e.subject_id
+    evaluation_list e ON s.id = e.student_id AND r.subject_id = e.subject_id
     LEFT JOIN
-        subject_list sl ON r.subject_id = sl.id
+    subject_list sl ON r.subject_id = sl.id
     GROUP BY 
-        r.class_id, r.subject_id, sl.code, sl.subject
+    r.subject_id, sl.subject
     LIMIT $offset, $rowsPerPage";
 
     $result = $conn->query($query);
@@ -159,9 +159,9 @@
                             <th>Course Code</th>
                             <th>Course Name</th>
                             <th>Total Students</th>
-                            <th>Students with Feedback</th>
-                            <th>Students without Feedback</th>
-                            <th>Action</th>
+                            <th>Students Evaluated</th>
+                            <th>Students NOT Evaluated</th>
+                            <th>List of Students Not Evaluated</th>
                         </tr>
                     </thead>
                     <tbody>

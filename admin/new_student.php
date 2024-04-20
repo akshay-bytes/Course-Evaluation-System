@@ -22,25 +22,30 @@ include 'db_connect.php';
 							<input type="text" name="lastname" class="form-control form-control-sm" required value="<?php echo isset($lastname) ? $lastname : '' ?>">
 						</div>
 
-						<div class="form-group">
+						<!-- <div class="form-group">
 							<label for="" class="control-label">Academic Year</label>
 							<select name="academic_id" class="form-control form-control-sm" required>
-								<option value="">Select Academic Year</option>
-								<?php
-								// Fetch the latest academic year from the database
-								$latest_academic_year = $conn->query("SELECT id, year, semester FROM academic_list ORDER BY id DESC LIMIT 1");
-								if ($latest_academic_year && $latest_academic_year->num_rows > 0) {
-									$row = $latest_academic_year->fetch_assoc();
-									$latest_year_id = $row['id'];
-									// Fetch academic years from the database
-									$academic_years = $conn->query("SELECT id, year, semester FROM academic_list");
-									while ($row = $academic_years->fetch_assoc()) :
-								?>
-										<option value="<?php echo $row['id'] ?>" <?php echo ($latest_year_id == $row['id']) ? 'selected' : '' ?>><?php echo $row['year'] . ' - ' . $row['semester'] ?></option>
-								<?php endwhile;
-								} ?>
-							</select>
-						</div>
+								<option value="">Select Academic Year</option> -->
+						<?php
+						// Fetch the latest academic year from the database
+						// $latest_academic_year = $conn->query("SELECT id, year, semester FROM academic_list ORDER BY id DESC LIMIT 1");
+						// if ($latest_academic_year && $latest_academic_year->num_rows > 0) {
+						// 	$row = $latest_academic_year->fetch_assoc();
+						// 	$latest_year_id = $row['id'];
+						// 	// Fetch academic years from the database
+						// 	$academic_years = $conn->query("SELECT id, year, semester FROM academic_list");
+						// 	while ($row = $academic_years->fetch_assoc()) :
+						?>
+						<!-- <option value="<?php // echo $row['id'] 
+											?>" <?php // echo ($latest_year_id == $row['id']) ? 'selected' : '' 
+																			?>><?php // echo $row['year'] . ' - ' . $row['semester'] 
+																																			?></option> -->
+						<?php
+						// endwhile;
+						// } 
+						?>
+						<!-- </select> -->
+						<!-- </div> -->
 
 
 						<div class="form-group">

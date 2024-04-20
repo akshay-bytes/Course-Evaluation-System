@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 ini_set('display_errors', 1);
@@ -158,7 +157,6 @@ class Action
 		$type = array("", "users", "faculty_list", "student_list");
 		foreach ($_POST as $k => $v) {
 			if (!in_array($k, array('id', 'cpass', 'table', 'password')) && !is_numeric($k)) {
-
 				if (empty($data)) {
 					$data .= " $k='$v' ";
 				} else {
@@ -181,7 +179,6 @@ class Action
 		if (empty($id)) {
 			$save = $this->db->query("INSERT INTO {$type[$_SESSION['login_type']]} set $data");
 		} else {
-			echo "UPDATE {$type[$_SESSION['login_type']]} set $data where id = $id";
 			$save = $this->db->query("UPDATE {$type[$_SESSION['login_type']]} set $data where id = $id");
 		}
 
@@ -192,9 +189,14 @@ class Action
 			}
 			if (isset($_FILES['img']) && !empty($_FILES['img']['tmp_name']))
 				$_SESSION['login_avatar'] = $fname;
-			return 1;
+			// Return success message
+			return 1; // success
+
+		} else {
+			return mysqli_error($this->db); // Return the MySQL error message
 		}
 	}
+
 	function delete_user()
 	{
 		extract($_POST);
@@ -538,7 +540,7 @@ class Action
 		}
 		$check = $this->db->query("SELECT * FROM student_list where email ='$email' " . (!empty($id) ? " and id != {$id} " : ''))->num_rows;
 		if ($check > 0) {
-			return 2;
+			return 1;
 			exit;
 		}
 		if (isset($_FILES['img']) && $_FILES['img']['tmp_name'] != '') {
@@ -556,6 +558,7 @@ class Action
 			return 1;
 		}
 	}
+
 	function delete_student()
 	{
 		extract($_POST);

@@ -18,7 +18,7 @@ if (isset($_GET['class_id'], $_GET['subject_id']) && is_numeric($_GET['class_id'
     c.section AS sec,
     subj.subject
 FROM 
-    student_list s
+    (SELECT * FROM student_list WHERE class_id IN (SELECT class_id FROM restriction_list WHERE subject_id = ?)) s
 JOIN 
     class_list c ON s.class_id = c.id
 JOIN 
@@ -26,14 +26,13 @@ JOIN
 LEFT JOIN 
     evaluation_list e ON s.id = e.student_id AND e.subject_id = ?
 WHERE
-    s.class_id = ?
-    AND e.student_id IS NULL");
+    subj.id = ? -- Filter by subject ID
+    AND e.student_id IS NULL; -- Students who haven't evaluated
 
-    // Fetch students data based on class and section
-    // $query = "SELECT * FROM students WHERE evaluated = 0 AND class_id = $classId ORDER BY class_id, section";
+");
 
     // Bind parameters
-    $stmt->bind_param("iii", $subject_id, $subject_id, $class_id);
+    $stmt->bind_param("iiii", $subject_id, $subject_id, $subject_id, $subject_id);
 
     // Execute query
     $stmt->execute();

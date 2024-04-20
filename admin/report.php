@@ -1,3 +1,5 @@
+<?php include 'db_connect.php'; ?>
+
 <?php $faculty_id = isset($_GET['fid']) ? $_GET['fid'] : ''; ?>
 <?php
 function ordinal_suffix($val)
@@ -197,12 +199,6 @@ function ordinal_suffix($val)
 	</style>
 </noscript>
 
-<!-- Canvas element for the chart -->
-<canvas id="feedbackChart" width="400" height="400"></canvas>
-
-<!-- Include Chart.js library -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <!-- Include jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -294,24 +290,26 @@ function ordinal_suffix($val)
 			$('#classField').text(data.class)
 			$('.show-result.active').removeClass('active')
 			$(this).addClass('active')
+			fetchDataAndCreateChart(); // Call fetchDataAndCreateChart() here
 		})
 	}
 
+	// Function to load report
 	function load_report($faculty_id, $subject_id, $class_id) {
 		if ($('#preloader2').length <= 0)
-			start_load()
+			start_load();
 		$.ajax({
 			url: 'ajax.php?action=get_report',
 			method: "POST",
 			data: {
 				faculty_id: $faculty_id,
-				subject_id: $subject_id,
+				subject_id: $subject_id, // Include subject_id in the data sent to the server
 				class_id: $class_id
 			},
 			error: function(err) {
-				console.log(err)
-				alert_toast("An Error Occured.", "error");
-				end_load()
+				console.log(err);
+				alert_toast("An Error Occurred.", "error");
+				end_load();
 			},
 			success: function(resp) {
 				if (resp) {
@@ -320,10 +318,6 @@ function ordinal_suffix($val)
 						$('.rates').text('');
 						$('#tse').text('');
 						$('#print-btn').hide();
-						var feedbackData = JSON.parse(resp);
-
-						// Call the function to create the chart with the feedbackData
-						createChart(feedbackData);
 					} else {
 						$('#print-btn').show();
 						$('#tse').text(resp.tse);
@@ -331,19 +325,21 @@ function ordinal_suffix($val)
 						var data = resp.data;
 						Object.keys(data).map(q => {
 							Object.keys(data[q]).map(r => {
-								console.log($('.rate_' + r + '_' + q), data[q][r])
-								$('.rate_' + r + '_' + q).text(data[q][r] + '%')
-							})
-						})
+								console.log($('.rate_' + r + '_' + q), data[q][r]);
+								$('.rate_' + r + '_' + q).text(data[q][r] + '%');
+							});
+						});
+						// Update chart whenever report data is loaded
+						fetchDataAndCreateChart(); // Call fetchDataAndCreateChart() here
 					}
 				}
 			},
-
 			complete: function() {
-				end_load()
+				end_load();
 			}
-		})
+		});
 	}
+
 	$('#print-btn').click(function() {
 		start_load()
 		var ns = $('noscript').clone()
@@ -358,49 +354,4 @@ function ordinal_suffix($val)
 			end_load()
 		}, 750)
 	})
-
-	//------------------------- Script for Creating Chart -------------------------//
-
-	// Sample data for the chart
-	var data = {
-		labels: ['Excellent', 'Good', 'Average', 'Below Average', 'Poor'],
-		datasets: [{
-			data: [20, 30, 15, 10, 25], // Sample scores for each category
-			backgroundColor: [
-				'rgba(255, 99, 132, 0.5)',
-				'rgba(54, 162, 235, 0.5)',
-				'rgba(255, 206, 86, 0.5)',
-				'rgba(75, 192, 192, 0.5)',
-				'rgba(153, 102, 255, 0.5)'
-			],
-			borderColor: [
-				'rgba(255, 99, 132, 1)',
-				'rgba(54, 162, 235, 1)',
-				'rgba(255, 206, 86, 1)',
-				'rgba(75, 192, 192, 1)',
-				'rgba(153, 102, 255, 1)'
-			],
-			borderWidth: 1
-		}]
-	};
-
-	// Chart configuration
-	var options = {
-		responsive: false,
-		maintainAspectRatio: false,
-		title: {
-			display: true,
-			text: 'Feedback Statistics Chart'
-		}
-	};
-
-	// Get canvas element
-	var ctx = document.getElementById('feedbackChart').getContext('2d');
-
-	// Create pie chart
-	var myPieChart = new Chart(ctx, {
-		type: 'bar',
-		data: data,
-		options: options
-	});
 </script>

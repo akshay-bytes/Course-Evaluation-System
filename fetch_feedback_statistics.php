@@ -13,23 +13,23 @@ $offset = ($page - 1) * $rowsPerPage;
 
 // Fetch feedback statistics data with pagination
 $query = "SELECT 
-    r.class_id AS class_id,
-    r.subject_id AS subject_id,
-    sl.code AS subject_code,
-    sl.subject AS subject_name,
-    COUNT(DISTINCT s.id) AS total_students,
-    COUNT(DISTINCT CASE WHEN e.student_id IS NOT NULL THEN e.student_id END) AS students_evaluated_feedback,
-    COUNT(DISTINCT CASE WHEN e.student_id IS NULL THEN s.id END) AS students_not_evaluated_feedback
+r.class_id AS class_id,
+r.subject_id AS subject_id,
+sl.code AS subject_code,
+sl.subject AS subject_name,
+COUNT(DISTINCT s.id) AS total_students,
+COUNT(DISTINCT CASE WHEN e.student_id IS NOT NULL THEN e.student_id END) AS students_evaluated_feedback,
+COUNT(DISTINCT CASE WHEN e.student_id IS NULL THEN s.id END) AS students_not_evaluated_feedback
 FROM 
-    student_list s
+student_list s
 JOIN 
-    restriction_list r ON s.class_id = r.class_id
+restriction_list r ON s.class_id = r.class_id
 LEFT JOIN 
-    evaluation_list e ON s.id = e.student_id AND r.subject_id = e.subject_id
+evaluation_list e ON s.id = e.student_id AND r.subject_id = e.subject_id
 LEFT JOIN
-    subject_list sl ON r.subject_id = sl.id
+subject_list sl ON r.subject_id = sl.id
 GROUP BY 
-    r.class_id, r.subject_id, sl.code, sl.subject
+r.subject_id, sl.subject ASC
 LIMIT $offset, $rowsPerPage";
 
 $result = $conn->query($query);

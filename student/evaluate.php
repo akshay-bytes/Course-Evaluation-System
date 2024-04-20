@@ -22,7 +22,6 @@ function ordinal_suffix1($val)
 	}
 }
 
-
 $rid = '';
 $faculty_id = '';
 $subject_id = '';
@@ -59,7 +58,7 @@ $restriction = $stmt->get_result();
 				<div class="card-header">
 					<h5><b>Academic Year: <?php echo $_SESSION['academic']['year'] . ' ' . (ordinal_suffix1($_SESSION['academic']['semester'])) ?> Semester</b></h5>
 					<div class="card-tools">
-						<button class="btn btn-sm btn-flat btn-primary bg-gradient-primary mx-1" form="manage-evaluation">Submit Evaluation</button>
+						<button class="btn btn-sm btn-flat mx-1 text-white" style="background-color: #840F1E;" form="manage-evaluation">Submit Evaluation</button>
 					</div>
 				</div>
 				<div class="card-body">
