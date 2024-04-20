@@ -39,7 +39,7 @@ $astat = array("Not Yet Started", "On-going", "Closed");
 
           <!-- Add Students Form -->
           <h4>Add Student Data</h4>
-          <p>Download Sample File: <a href="sample_student_data.csv" download>CSV</a></p>
+          <p>Download Sample File: <a href="./assests/uploads/sample_student_data.csv" download>CSV</a></p>
           <form action="student_form.php" method="post" id="imp_student" enctype="multipart/form-data">
             <input type="file" name="file" accept=".csv">
             <button type="submit" name="submit">Upload</button>
@@ -47,7 +47,7 @@ $astat = array("Not Yet Started", "On-going", "Closed");
 
           <!-- Add Teachers Form -->
           <h4>Add Teachers Data</h4>
-          <p>Download Sample File: <a href="sample_teacher_data.csv" download>CSV</a></p>
+          <p>Download Sample File: <a href="./assests/uploads/sample_teacher_data.csv" download>CSV</a></p>
           <form action="faculty_form.php" method="post" id="imp_faculty" enctype="multipart/form-data">
             <input type="file" name="file" accept=".csv">
             <button type="submit" name="submit">Upload</button>
@@ -55,7 +55,7 @@ $astat = array("Not Yet Started", "On-going", "Closed");
 
           <!-- Add Courses Form -->
           <h4>Add Course Data</h4>
-          <p>Download Sample File: <a href="sample_course_data.csv" download>CSV</a></p>
+          <p>Download Sample File: <a href="./assests/uploads/sample_course_data.csv" download>CSV</a></p>
           <form action="teacher_form.php" method="post" id="imp_course" enctype="multipart/form-data">
             <input type="file" name="file" accept=".csv">
             <button type="submit" name="submit">Upload</button>
