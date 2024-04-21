@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 01, 2024 at 06:19 PM
+-- Generation Time: Apr 21, 2024 at 06:22 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -31,7 +31,7 @@ CREATE TABLE `academic_list` (
   `id` int(30) NOT NULL,
   `academic_id` int(30) NOT NULL,
   `year` text NOT NULL,
-  `semester` int(30) NOT NULL,
+  `semester` text NOT NULL,
   `is_default` tinyint(1) NOT NULL DEFAULT 0,
   `status` int(1) NOT NULL DEFAULT 0 COMMENT '0=Pending,1=Start,2=Closed'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -41,8 +41,8 @@ CREATE TABLE `academic_list` (
 --
 
 INSERT INTO `academic_list` (`id`, `academic_id`, `year`, `semester`, `is_default`, `status`) VALUES
-(1, 1, '2022-2023', 2, 0, 0),
-(2, 2, '2023-2024', 2, 1, 1);
+(1, 1, '2023-2024', 'Odd', 0, 1),
+(2, 2, '2023-2024', 'Even', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -106,41 +106,51 @@ CREATE TABLE `evaluation_answers` (
 --
 
 INSERT INTO `evaluation_answers` (`evaluation_id`, `question_id`, `rate`) VALUES
-(1, 1, 4),
-(1, 2, 5),
-(1, 3, 4),
-(1, 4, 5),
-(1, 5, 4),
-(2, 1, 4),
-(2, 2, 5),
-(2, 3, 4),
-(2, 4, 5),
-(2, 5, 4),
-(3, 1, 4),
+(3, 1, 5),
 (3, 2, 5),
-(3, 3, 4),
+(3, 3, 5),
 (3, 4, 5),
-(3, 5, 4),
-(4, 1, 5),
-(4, 2, 5),
-(4, 3, 5),
-(4, 4, 5),
+(3, 5, 5),
+(3, 6, 5),
+(3, 7, 5),
+(3, 8, 5),
+(3, 9, 5),
+(3, 10, 5),
+(1, 1, 1),
+(1, 2, 2),
+(1, 3, 3),
+(1, 4, 4),
+(1, 5, 5),
+(2, 1, 1),
+(2, 2, 2),
+(2, 3, 3),
+(2, 4, 4),
+(2, 5, 5),
+(2, 6, 1),
+(2, 7, 2),
+(2, 8, 3),
+(2, 9, 4),
+(2, 10, 5),
+(3, 1, 1),
+(3, 2, 2),
+(3, 3, 3),
+(3, 4, 4),
+(3, 5, 5),
+(3, 6, 1),
+(3, 7, 2),
+(3, 8, 3),
+(3, 9, 4),
+(3, 10, 5),
+(4, 1, 1),
+(4, 2, 2),
+(4, 3, 3),
+(4, 4, 4),
 (4, 5, 5),
-(5, 1, 1),
-(5, 2, 1),
-(5, 3, 1),
-(5, 4, 1),
-(5, 5, 1),
-(6, 1, 3),
-(6, 2, 5),
-(6, 3, 3),
-(6, 4, 5),
-(6, 5, 3),
-(7, 1, 3),
-(7, 2, 5),
-(7, 3, 4),
-(7, 4, 5),
-(7, 5, 5);
+(4, 6, 1),
+(4, 7, 2),
+(4, 8, 3),
+(4, 9, 4),
+(4, 10, 5);
 
 -- --------------------------------------------------------
 
@@ -164,11 +174,7 @@ CREATE TABLE `evaluation_list` (
 --
 
 INSERT INTO `evaluation_list` (`evaluation_id`, `academic_id`, `class_id`, `student_id`, `subject_id`, `faculty_id`, `restriction_id`, `date_taken`) VALUES
-(3, 2, 5, 1, 1, 1, 9, '2024-02-26 15:58:04'),
-(4, 2, 5, 1, 4, 2, 11, '2024-02-26 15:58:06'),
-(5, 2, 3, 3, 2, 2, 13, '2024-02-26 15:59:00'),
-(6, 2, 5, 5, 1, 1, 9, '2024-03-12 10:06:45'),
-(7, 2, 5, 5, 4, 2, 11, '2024-03-12 10:06:55');
+(4, 2, 5, 1, 1, 1, 9, '2024-04-21 21:47:38');
 
 -- --------------------------------------------------------
 
@@ -192,8 +198,14 @@ CREATE TABLE `faculty_list` (
 --
 
 INSERT INTO `faculty_list` (`id`, `school_id`, `firstname`, `lastname`, `email`, `password`, `avatar`, `date_created`) VALUES
-(1, '101', 'Rahul', 'Pawar', '101@medicaps.ac.in', '634555a8c3b6790128207bf0e5f231e7', 'no-image-available.png', '2024-02-21 14:21:36'),
-(2, '102', 'Sagar', 'Pandya', '102@medicaps.ac.in', '634555a8c3b6790128207bf0e5f231e7', 'no-image-available.png', '2024-02-21 14:22:11');
+(1, '101', 'T', '1', '101@medicaps.ac.in', '634555a8c3b6790128207bf0e5f231e7', 'no-image-available.png', '2024-02-21 14:21:36'),
+(2, '102', 'T', '2', '102@medicaps.ac.in', '634555a8c3b6790128207bf0e5f231e7', 'no-image-available.png', '2024-02-21 14:22:11'),
+(3, '103', 'T', '3', '103@medicaps.ac.in', '6974ce5ac660610b44d9b9fed0ff9548', '', '0000-00-00 00:00:00'),
+(4, '104', 'T', '4', '104@medicaps.ac.in', 'c9e1074f5b3f9fc8ea15d152add07294', '', '0000-00-00 00:00:00'),
+(5, '105', 'T', '5', '105@medicaps.ac.in', '65b9eea6e1cc6bb9f0cd2a47751a186f', '', '0000-00-00 00:00:00'),
+(6, '106', 'T', '6', '106@medicaps.ac.in', 'f0935e4cd5920aa6c7c996a5ee53a70f', '', '0000-00-00 00:00:00'),
+(7, '107', 'T', '7', '107@medicaps.ac.in', 'a97da629b098b75c294dffdc3e463904', '', '0000-00-00 00:00:00'),
+(8, '108', 'T', '8', '108@medicaps.ac.in', 'a3c65c2974270fd093ee8a9bf8ae7d0b', '', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -218,7 +230,14 @@ INSERT INTO `question_list` (`id`, `academic_id`, `question`, `order_by`, `crite
 (2, 2, 'Que 2', 1, 1),
 (3, 2, 'Que 3', 2, 1),
 (4, 2, 'Que 4', 3, 1),
-(5, 2, 'Que 5', 4, 1);
+(5, 2, 'Que 5', 4, 1),
+(6, 2, 'Que 1', 5, 2),
+(7, 2, 'Que 2', 6, 2),
+(8, 2, 'Que 3', 7, 2),
+(9, 2, 'Que 4', 8, 2),
+(10, 2, 'Que 5', 9, 2),
+(11, 1, 'Que 1', 0, 1),
+(12, 1, 'Que 2', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -247,7 +266,8 @@ INSERT INTO `restriction_list` (`id`, `academic_id`, `faculty_id`, `class_id`, `
 (10, 2, 1, 6, 4),
 (11, 2, 2, 5, 4),
 (12, 2, 2, 6, 1),
-(13, 2, 2, 3, 2);
+(14, 2, 3, 5, 9),
+(15, 1, 1, 5, 1);
 
 -- --------------------------------------------------------
 
@@ -258,7 +278,6 @@ INSERT INTO `restriction_list` (`id`, `academic_id`, `faculty_id`, `class_id`, `
 CREATE TABLE `student_list` (
   `id` int(30) NOT NULL,
   `school_id` varchar(100) NOT NULL,
-  `academic_id` int(11) NOT NULL,
   `firstname` varchar(200) NOT NULL,
   `lastname` varchar(200) NOT NULL,
   `email` varchar(200) NOT NULL,
@@ -272,12 +291,13 @@ CREATE TABLE `student_list` (
 -- Dumping data for table `student_list`
 --
 
-INSERT INTO `student_list` (`id`, `school_id`, `academic_id`, `firstname`, `lastname`, `email`, `password`, `class_id`, `avatar`, `date_created`) VALUES
-(1, 'EN20IT301003', 2, 'Aastha Raj', 'Singh', 'EN20IT301003@medicaps.ac.in', '634555a8c3b6790128207bf0e5f231e7', 5, 'no-image-available.png', '2024-02-25 14:11:50'),
-(2, 'EN20IT301001', 2, 'Aaditya', 'Kumar', 'EN20IT301001@medicaps.ac.in', '634555a8c3b6790128207bf0e5f231e7', 5, 'no-image-available.png', '2024-02-25 15:49:49'),
-(3, 'EN21IT301001', 2, 'Demo', 'Demo', 'EN21IT301001@medicaps.ac.in', '36396b644975f471b04d0a5f0027a94b', 3, 'no-image-available.png', '2024-02-26 15:32:22'),
-(4, 'EN20IT3010104', 2, 'Aayush', 'Arora', 'EN20IT301004@medicaps.ac.in', '634555a8c3b6790128207bf0e5f231e7', 5, 'no-image-available.png', '2024-02-26 15:33:25'),
-(5, 'EN20IT301017', 2, 'Arish', 'sahu', 'EN20T301017@medicaps.ac.in', '634555a8c3b6790128207bf0e5f231e7', 5, 'no-image-available.png', '2024-03-12 10:06:04');
+INSERT INTO `student_list` (`id`, `school_id`, `firstname`, `lastname`, `email`, `password`, `class_id`, `avatar`, `date_created`) VALUES
+(1, 'EN20IT301003', 'Aastha Raj', 'Singh', 'EN20IT301003@medicaps.ac.in', '634555a8c3b6790128207bf0e5f231e7', 5, '1713556920_breno-machado-in9-n0JwgZ0-unsplash.jpg', '2024-02-25 14:11:50'),
+(2, 'EN20IT301001', 'Aaditya', 'Kumar', 'EN20IT301001@medicaps.ac.in', '634555a8c3b6790128207bf0e5f231e7', 5, 'no-image-available.png', '2024-02-25 15:49:49'),
+(3, 'EN21IT301001', 'Demo', 'Demo', 'EN21IT301001@medicaps.ac.in', '36396b644975f471b04d0a5f0027a94b', 3, 'no-image-available.png', '2024-02-26 15:32:22'),
+(4, 'EN20IT301004', 'Aayush', 'Arora', 'EN20IT301004@medicaps.ac.in', '634555a8c3b6790128207bf0e5f231e7', 5, 'no-image-available.png', '2024-02-26 15:33:25'),
+(5, 'EN20IT301017', 'Arish', 'sahu', 'EN20T301017@medicaps.ac.in', '634555a8c3b6790128207bf0e5f231e7', 5, 'no-image-available.png', '2024-03-12 10:06:04'),
+(7, 'EN20IT301007', 'Abhishek', 'Kushwaha', 'EN20IT301007@medicaps.ac.in', '634555a8c3b6790128207bf0e5f231e7', 5, 'no-image-available.png', '2024-04-21 12:51:20');
 
 -- --------------------------------------------------------
 
@@ -297,10 +317,16 @@ CREATE TABLE `subject_list` (
 --
 
 INSERT INTO `subject_list` (`id`, `code`, `subject`, `description`) VALUES
-(1, 'IT1', 'Computer Network', ''),
-(2, 'IT2', 'Computer System Architecture', ''),
-(3, 'IT3', 'Operating System', ''),
-(4, 'IT4', 'Cloud Computing', '');
+(1, 'IT02', 'Subject 02', ''),
+(2, 'IT09', 'Subject 09', ''),
+(3, 'IT04', 'Subject 04', ''),
+(4, 'IT01', 'Subject 01', ''),
+(5, 'IT08', 'Subject 08', ''),
+(6, 'IT10', 'Subject 10', ''),
+(7, 'IT07', 'Subject 07', ''),
+(8, 'IT05', 'Subject 05', ''),
+(9, 'IT03', 'Subject 03', ''),
+(10, 'IT06', 'Subject 06', '');
 
 -- --------------------------------------------------------
 
@@ -428,7 +454,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `academic_list`
 --
 ALTER TABLE `academic_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `class_list`
@@ -446,37 +472,37 @@ ALTER TABLE `criteria_list`
 -- AUTO_INCREMENT for table `evaluation_list`
 --
 ALTER TABLE `evaluation_list`
-  MODIFY `evaluation_id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `evaluation_id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `faculty_list`
 --
 ALTER TABLE `faculty_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `question_list`
 --
 ALTER TABLE `question_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `restriction_list`
 --
 ALTER TABLE `restriction_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `student_list`
 --
 ALTER TABLE `student_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `subject_list`
 --
 ALTER TABLE `subject_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `system_settings`
