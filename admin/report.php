@@ -117,7 +117,7 @@ function ordinal_suffix($val)
 				</div>
 				<fieldset class="border border-info p-2 w-100">
 					<legend class="w-auto">Rating Legend</legend>
-					<p>5 = Strongly Agree, 4 = Agree, 3 = Uncertain, 2 = Disagree, 1 = Strongly Disagree</p>
+					<p> 1 = Strongly Disagree, 2 = Disagree, 3 = Uncertain , 4 = Agree, 5 = Strongly Agree</p>
 				</fieldset>
 				<?php
 				$q_arr = array();
@@ -290,7 +290,6 @@ function ordinal_suffix($val)
 			$('#classField').text(data.class)
 			$('.show-result.active').removeClass('active')
 			$(this).addClass('active')
-			fetchDataAndCreateChart(); // Call fetchDataAndCreateChart() here
 		})
 	}
 
@@ -329,8 +328,6 @@ function ordinal_suffix($val)
 								$('.rate_' + r + '_' + q).text(data[q][r] + '%');
 							});
 						});
-						// Update chart whenever report data is loaded
-						fetchDataAndCreateChart(); // Call fetchDataAndCreateChart() here
 					}
 				}
 			},

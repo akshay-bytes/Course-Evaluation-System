@@ -2,7 +2,7 @@
   .nav-link.active,
   .nav-link:active,
   .nav-link:focus {
-    background-color: #840F1E !important;
+    background-image: radial-gradient(#941727, #66000D) !important;
     /* Change the color to #840F1E */
   }
 

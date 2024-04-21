@@ -31,11 +31,14 @@ if (isset($_GET['fid']))
 	$faculty_id = $_GET['fid'];
 if (isset($_GET['sid']))
 	$subject_id = $_GET['sid'];
+
 $stmt = $conn->prepare("SELECT r.id,s.id as sid,f.id as fid,concat(f.firstname,' ',f.lastname) as faculty,s.code,s.subject FROM restriction_list r inner join faculty_list f on f.id = r.faculty_id inner join subject_list s on s.id = r.subject_id where academic_id = ? and class_id = ? and r.id not in (SELECT restriction_id from evaluation_list where academic_id = ? and student_id = ?)");
 $stmt->bind_param("iiii", $_SESSION['academic']['id'], $_SESSION['login_class_id'], $_SESSION['academic']['id'], $_SESSION['login_id']);
 $stmt->execute();
 $restriction = $stmt->get_result();
-// $restriction = $conn->query("SELECT r.id,s.id as sid,f.id as fid,concat(f.firstname,' ',f.lastname) as faculty,s.code,s.subject FROM restriction_list r inner join faculty_list f on f.id = r.faculty_id inner join subject_list s on s.id = r.subject_id where academic_id ={$_SESSION['academic']['id']} and class_id = {$_SESSION['login_class_id']} and r.id not in (SELECT restriction_id from evaluation_list where academic_id ={$_SESSION['academic']['id']} and student_id = {$_SESSION['login_id']} ) ");
+
+$restriction = $conn->query("SELECT r.id,s.id as sid,f.id as fid,concat(f.firstname,' ',f.lastname) as faculty,s.code,s.subject FROM restriction_list r inner join faculty_list f on f.id = r.faculty_id inner join subject_list s on s.id = r.subject_id where academic_id ={$_SESSION['academic']['id']} and class_id = {$_SESSION['login_class_id']} and r.id not in (SELECT restriction_id from evaluation_list where academic_id ={$_SESSION['academic']['id']} and student_id = {$_SESSION['login_id']} ) ");
+
 ?>
 <div class="col-lg-12">
 	<div class="row">
@@ -64,7 +67,7 @@ $restriction = $stmt->get_result();
 				<div class="card-body">
 					<fieldset class="border border-info p-2 w-100">
 						<legend class="w-auto">Rating Legend</legend>
-						<p>5 = Strongly Agree, 4 = Agree, 3 = Uncertain, 2 = Disagree, 1 = Strongly Disagree</p>
+						<p> 1 = Strongly Disagree, 2 = Disagree, 3 = Uncertain , 4 = Agree, 5 = Strongly Agree</p>
 					</fieldset>
 					<form id="manage-evaluation">
 						<input type="hidden" name="class_id" value="<?php echo $_SESSION['login_class_id'] ?>">
@@ -82,11 +85,11 @@ $restriction = $stmt->get_result();
 								<thead>
 									<tr class="bg-gradient-secondary">
 										<th class=" p-1"><b><?php echo $crow['criteria'] ?></b></th>
-										<th class="text-center">1</th>
-										<th class="text-center">2</th>
-										<th class="text-center">3</th>
-										<th class="text-center">4</th>
-										<th class="text-center">5</th>
+										<th width="5%" class="text-center"> Strongly Disagree </th>
+										<th width="5%" class="text-center"> Disagree </th>
+										<th width="5%" class="text-center"> Uncertain </th>
+										<th width="5%" class="text-center"> Agree </th>
+										<th width="5%" class="text-center"> Strongly Agree </th>
 									</tr>
 								</thead>
 								<tbody class="tr-sortable">
@@ -103,7 +106,7 @@ $restriction = $stmt->get_result();
 											<?php for ($c = 1; $c <= 5; $c++) : ?>
 												<td class="text-center">
 													<div class="icheck-success d-inline">
-														<input type="radio" name="rate[<?php echo $row['id'] ?>]" <?php echo $c == 5 ? "checked" : '' ?> id="qradio<?php echo $row['id'] . '_' . $c ?>" value="<?php echo $c ?>">
+														<input type="radio" name="rate[<?php echo $row['id'] ?>]" id="qradio<?php echo $row['id'] . '_' . $c ?>" value="<?php echo $c ?>">
 														<label for="qradio<?php echo $row['id'] . '_' . $c ?>">
 														</label>
 													</div>
@@ -123,16 +126,24 @@ $restriction = $stmt->get_result();
 <script>
 	$(document).ready(function() {
 		if ('<?php echo $_SESSION['academic']['status'] ?>' == 0) {
-			uni_modal("Information", "<?php echo $_SESSION['login_view_folder'] ?>not_started.php")
+			uni_modal("Information", "<?php echo $_SESSION['login_view_folder'] ?> not_started.php")
 		} else if ('<?php echo $_SESSION['academic']['status'] ?>' == 2) {
-			uni_modal("Information", "<?php echo $_SESSION['login_view_folder'] ?>closed.php")
+			uni_modal("Information", "<?php echo $_SESSION['login_view_folder'] ?> closed.php")
 		}
 		if (<?php echo empty($rid) ? 1 : 0 ?> == 1)
-			uni_modal("Information", "<?php echo $_SESSION['login_view_folder'] ?>done.php")
+			uni_modal("Information", "<?php echo $_SESSION['login_view_folder'] ?> done.php")
 	})
 	$('#manage-evaluation').submit(function(e) {
 		e.preventDefault();
-		start_load()
+		var totalQuestions = $('input[name="qid[]"]').length;
+		var evaluatedQuestions = $('input[name^="rate"]:checked').length;
+
+		if (evaluatedQuestions < totalQuestions) {
+			alert_toast('Please evaluate all questions before submitting.', 'warning');
+			return;
+		}
+
+		start_load();
 		$.ajax({
 			url: 'ajax.php?action=save_evaluation',
 			method: 'POST',
@@ -141,10 +152,10 @@ $restriction = $stmt->get_result();
 				if (resp == 1) {
 					alert_toast("Data successfully saved.", "success");
 					setTimeout(function() {
-						location.reload()
-					}, 1750)
+						location.reload();
+					}, 1750);
 				}
 			}
-		})
-	})
+		});
+	});
 </script>

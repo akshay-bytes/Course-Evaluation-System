@@ -135,7 +135,7 @@ include 'header.php'
 
     <!-- Main Footer -->
     <!-- Main Footer -->
-    <footer class="main-footer text-white" style="background-color: #840F1E;">
+    <footer class="main-footer text-white" style="background-image: radial-gradient(#941727, #66000D);">
       <div style="display: flex; justify-content: center; text-align: center;">
         Copyright &copy; 2024 Developed & Designed by <span> &nbsp;Akshay Billore&nbsp; </span> and Aastha Raj Singh
         under the guidance of Dr. Prashant Panse.

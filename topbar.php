@@ -8,7 +8,7 @@
   </style>
 
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-dark" style="background-color: #840F1E;">
+  <nav class="main-header navbar navbar-expand navbar-dark" style="background-image: radial-gradient(#941727, #66000D);">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <?php
