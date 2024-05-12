@@ -144,6 +144,7 @@ function ordinal_suffix($val)
 		}
 	</style>
 </noscript>
+
 <script>
 	$(document).ready(function() {
 		load_class()

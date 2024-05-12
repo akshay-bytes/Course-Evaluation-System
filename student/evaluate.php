@@ -126,12 +126,12 @@ $restriction = $conn->query("SELECT r.id,s.id as sid,f.id as fid,concat(f.firstn
 <script>
 	$(document).ready(function() {
 		if ('<?php echo $_SESSION['academic']['status'] ?>' == 0) {
-			uni_modal("Information", "<?php echo $_SESSION['login_view_folder'] ?> not_started.php")
+			uni_modal("Information", "<?php echo $_SESSION['login_view_folder'] ?>not_started.php")
 		} else if ('<?php echo $_SESSION['academic']['status'] ?>' == 2) {
-			uni_modal("Information", "<?php echo $_SESSION['login_view_folder'] ?> closed.php")
+			uni_modal("Information", "<?php echo $_SESSION['login_view_folder'] ?>closed.php")
 		}
 		if (<?php echo empty($rid) ? 1 : 0 ?> == 1)
-			uni_modal("Information", "<?php echo $_SESSION['login_view_folder'] ?> done.php")
+			uni_modal("Information", "<?php echo $_SESSION['login_view_folder'] ?>done.php")
 	})
 	$('#manage-evaluation').submit(function(e) {
 		e.preventDefault();
@@ -159,3 +159,22 @@ $restriction = $conn->query("SELECT r.id,s.id as sid,f.id as fid,concat(f.firstn
 		});
 	});
 </script>
+
+
+<!-- $('#manage-evaluation').submit(function(e){
+		e.preventDefault();
+		start_load()
+		$.ajax({
+			url:'ajax.php?action=save_evaluation',
+			method:'POST',
+			data:$(this).serialize(),
+			success:function(resp){
+				if(resp == 1){
+					alert_toast("Data successfully saved.","success");
+					setTimeout(function(){
+						location.reload()	
+					},1750)
+				}
+			}
+		})
+	}) -->
